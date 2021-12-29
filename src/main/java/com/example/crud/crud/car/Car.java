@@ -2,6 +2,7 @@ package com.example.crud.crud.car;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table()
@@ -14,6 +15,8 @@ public class Car {
     private String model;
     private String brand;
     private LocalDate dateOfProduction;
+    @Transient
+    private Integer age;
 
     public Car(String model, String brand, LocalDate dateOfProduction) {
         this.model = model;
@@ -67,4 +70,10 @@ public class Car {
     public void setDateOfProduction(LocalDate dateOfProduction) {
         this.dateOfProduction = dateOfProduction;
     }
+
+    public Integer getAge() {
+        return Period.between(this.dateOfProduction, LocalDate.now()).getYears();
+    }
+
+
 }

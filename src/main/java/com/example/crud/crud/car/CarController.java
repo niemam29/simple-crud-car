@@ -2,9 +2,7 @@ package com.example.crud.crud.car;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,8 +18,24 @@ public class CarController {
         this.carService = carService;
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public List<Car> get() {
         return carService.getCars();
+    }
+
+    @PostMapping
+    public void registerCar(@RequestBody Car car) {
+        carService.addCar(car);
+    }
+
+    @DeleteMapping(path = "{carId}")
+    public void delete(@PathVariable("carId") Long carId) {
+
+        carService.deleteCar(carId);
+    }
+
+    @PutMapping(path = "{carId}")
+    public void updateCar(@PathVariable("carId") Long carId, @RequestParam() String model) {
+        carService.updateBrand(carId, model);
     }
 }

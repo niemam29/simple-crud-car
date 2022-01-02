@@ -9,7 +9,6 @@ import java.util.List;
 
 @Configuration
 public class CarConfig {
-
     @Bean
     CommandLineRunner commandLineRunner(CarRepository carRepository) {
         return args -> {

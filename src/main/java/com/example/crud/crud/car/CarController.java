@@ -1,7 +1,6 @@
 package com.example.crud.crud.car;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class CarController {
     @DeleteMapping(path = "{carId}")
     public void delete(@PathVariable("carId") Long carId) {
 
-        carService.deleteCar(carId);
+        carService.deleteCarById(carId);
     }
 
     @PutMapping(path = "{carId}")

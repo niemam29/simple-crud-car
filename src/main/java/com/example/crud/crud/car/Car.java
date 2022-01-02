@@ -1,6 +1,8 @@
 package com.example.crud.crud.car;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -11,9 +13,15 @@ public class Car {
     @Id
     @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+    @NotNull
     private Long id;
+
+    @NotEmpty
     private String model;
+
+    @NotEmpty
     private String brand;
+
     private LocalDate dateOfProduction;
     @Transient
     private Integer age;

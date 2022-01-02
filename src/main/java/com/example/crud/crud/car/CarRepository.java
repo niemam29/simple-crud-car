@@ -2,14 +2,15 @@ package com.example.crud.crud.car;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
 
-    @Query("SELECT c FROM Car c WHERE c.brand = ?1")
-    Optional<Car> findCarByBrand(String brand);
+    @Query("select c from Car c " +
+            "where lower(c.brand) like lower(concat('%', :searchTerm, '%')) or lower(c.model) like lower(concat('%', :searchTerm, '%'))")
+    List<Car> search(@Param("searchTerm") String searchTerm);
 }

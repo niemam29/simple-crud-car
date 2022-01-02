@@ -20,13 +20,19 @@ public class CarService {
     public List<Car> getCars() {
         return carRepository.findAll();
     }
+    public List<Car> getCarsByBrand(String filter) {
+        return carRepository.search(filter);
+    }
 
     public void addCar(Car car) {
         carRepository.save(car);
     }
 
-    public void deleteCar(Long id) {
+    public void deleteCarById(Long id) {
         carRepository.deleteById(id);
+
+    }    public void deleteCar(Car car) {
+        carRepository.delete(car);
     }
 
     @Transactional

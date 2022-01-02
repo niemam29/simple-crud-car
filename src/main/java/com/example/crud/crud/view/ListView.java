@@ -7,6 +7,8 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -22,6 +24,7 @@ public class ListView extends VerticalLayout {
     Grid<Car> grid = new Grid<>(Car.class);
     TextField textField = new TextField();
     CarFormView carFormView;
+    Button refresh = new Button(new Icon(VaadinIcon.REFRESH));
     private CarService carService;
 
     public ListView(CarService carService, CarRepository carRepository) {
@@ -89,7 +92,7 @@ public class ListView extends VerticalLayout {
 
     private void configureGrid() {
         grid.addClassName("car-grid");
-        setSizeFull();
+        grid.setSizeFull();
         grid.setColumns("id", "brand", "model", "age");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
@@ -115,8 +118,9 @@ public class ListView extends VerticalLayout {
 
         addCarButton.addClickListener(e-> addCar());
 
+        refresh.addClickListener(e->refreshItemsOnGrid());
 
-        HorizontalLayout toolbar = new HorizontalLayout(textField, addCarButton);
+        HorizontalLayout toolbar = new HorizontalLayout(textField, addCarButton,refresh);
         toolbar.addClassName("toolbar");
         return toolbar;
     }

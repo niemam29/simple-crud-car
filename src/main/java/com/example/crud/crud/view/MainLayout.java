@@ -6,19 +6,18 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.HighlightCondition;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
 
 public class MainLayout extends AppLayout {
-    public MainLayout(){
+    public MainLayout() {
         createHeader();
         createDrawer();
     }
 
     private void createDrawer() {
         H1 logo = new H1("K.Konczyk");
-        logo.addClassNames("text-l","m-m");
+        logo.addClassNames("text-l", "m-m");
         HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), logo);
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.expand(logo);

@@ -16,9 +16,8 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 
+import java.time.LocalDate;
 import java.util.List;
-
-
 
 
 public class CarFormView extends FormLayout {
@@ -39,9 +38,14 @@ public class CarFormView extends FormLayout {
         add(
                 brand,
                 model,
-                dateOfProduction,
+                createDatePicker(),
                 createButtonLayout()
         );
+    }
+
+    private Component createDatePicker() {
+        dateOfProduction.setMax(LocalDate.now());
+        return dateOfProduction;
     }
 
     public void setCar(Car car) {

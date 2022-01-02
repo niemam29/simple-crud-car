@@ -3,6 +3,8 @@ package com.example.crud.crud.car;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -22,7 +24,9 @@ public class Car {
     @NotEmpty
     private String brand;
 
+    @PastOrPresent
     private LocalDate dateOfProduction;
+
     @Transient
     private Integer age;
 

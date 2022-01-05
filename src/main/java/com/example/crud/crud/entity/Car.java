@@ -1,10 +1,10 @@
-package com.example.crud.crud.car;
+package com.example.crud.crud.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.PastOrPresent;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -13,8 +13,8 @@ import java.time.Period;
 
 public class Car {
     @Id
-    @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+    @SequenceGenerator(name = "car_sequence", sequenceName = "car_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "car_sequence")
     @NotNull
     private Long id;
 
@@ -26,6 +26,8 @@ public class Car {
 
     @PastOrPresent
     private LocalDate dateOfProduction;
+
+    private File photo;
 
     @Transient
     private Integer age;
@@ -88,4 +90,11 @@ public class Car {
     }
 
 
+    public File getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(File photo) {
+        this.photo = photo;
+    }
 }

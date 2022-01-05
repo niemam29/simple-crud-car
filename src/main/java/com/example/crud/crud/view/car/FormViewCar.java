@@ -1,6 +1,6 @@
-package com.example.crud.crud.view;
+package com.example.crud.crud.view.car;
 
-import com.example.crud.crud.car.Car;
+import com.example.crud.crud.entity.Car;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -10,40 +10,69 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
 
 
-public class CarFormView extends FormLayout {
+public class FormViewCar extends FormLayout {
+    MemoryBuffer memoryBuffer = new MemoryBuffer();
     Binder<Car> binder = new BeanValidationBinder<>(Car.class);
 
     TextField brand = new TextField("Brand");
     TextField model = new TextField("Model");
     DatePicker dateOfProduction = new DatePicker("Date of production");
+    Upload photo = new Upload(memoryBuffer);
 
     Button save = new Button("Save");
     Button delete = new Button("Delete");
     Button cancel = new Button("Cancel");
     private Car car;
 
-    public CarFormView(List<Car> cars) {
+    public FormViewCar(List<Car> cars) {
         addClassName("form-view");
         binder.bindInstanceFields(this);
         add(
-                brand,
-                model,
-                createDatePicker(),
-                createButtonLayout()
+                createFormInputLayout()
         );
     }
 
+    private Component createFormInputLayout() {
+
+        brand.setWidthFull();
+        model.setWidthFull();
+
+        photo.setWidthFull();
+        photo.setMaxFiles(1);
+
+        photo.addFinishedListener(e -> {
+            String fileName = memoryBuffer.getFileName();
+            File file = new File("/tmp/files/" + fileName);
+            try {
+                FileUtils.copyInputStreamToFile(InputStream.nullInputStream(), file);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            car.setPhoto(file);
+        });
+
+        return new VerticalLayout(brand, model, createDatePicker(), photo, createButtonLayout());
+    }
+
     private Component createDatePicker() {
+        dateOfProduction.setWidthFull();
         dateOfProduction.setMax(LocalDate.now());
         return dateOfProduction;
     }
@@ -54,6 +83,7 @@ public class CarFormView extends FormLayout {
     }
 
     private Component createButtonLayout() {
+        addClassName("Buttons");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -65,7 +95,8 @@ public class CarFormView extends FormLayout {
         save.addClickShortcut(Key.ENTER);
         cancel.addClickShortcut(Key.ESCAPE);
 
-        return new HorizontalLayout(save, delete, cancel);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(save, delete, cancel);
+        return horizontalLayout;
     }
 
     private void validateAndSave() {
@@ -77,10 +108,10 @@ public class CarFormView extends FormLayout {
         }
     }
 
-    public static abstract class ContactFormEvent extends ComponentEvent<CarFormView> {
+    public static abstract class ContactFormEvent extends ComponentEvent<FormViewCar> {
         private Car car;
 
-        protected ContactFormEvent(CarFormView source, Car car) {
+        protected ContactFormEvent(FormViewCar source, Car car) {
             super(source, false);
             this.car = car;
         }
@@ -91,25 +122,25 @@ public class CarFormView extends FormLayout {
     }
 
     public static class SaveEvent extends ContactFormEvent {
-        SaveEvent(CarFormView source, Car car) {
+        SaveEvent(FormViewCar source, Car car) {
             super(source, car);
         }
     }
 
     public static class DeleteEvent extends ContactFormEvent {
-        DeleteEvent(CarFormView source, Car car) {
+        DeleteEvent(FormViewCar source, Car car) {
             super(source, car);
         }
 
     }
 
     public static class CloseEvent extends ContactFormEvent {
-        CloseEvent(CarFormView source) {
+        CloseEvent(FormViewCar source) {
             super(source, null);
         }
     }
 
-    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
+    protected  <T extends ComponentEvent<?>> Registration addCarListener(Class<T> eventType,
                                                                   ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }

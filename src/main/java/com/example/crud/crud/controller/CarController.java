@@ -1,5 +1,7 @@
-package com.example.crud.crud.car;
+package com.example.crud.crud.controller;
 
+import com.example.crud.crud.entity.Car;
+import com.example.crud.crud.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

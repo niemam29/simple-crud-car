@@ -1,5 +1,7 @@
-package com.example.crud.crud.car;
+package com.example.crud.crud.config;
 
+import com.example.crud.crud.repository.CarRepository;
+import com.example.crud.crud.entity.Car;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

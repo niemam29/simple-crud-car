@@ -1,5 +1,7 @@
 package com.example.crud.crud.view;
 
+import com.example.crud.crud.view.brand.ListViewBrand;
+import com.example.crud.crud.view.car.ListViewCar;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
@@ -13,6 +15,7 @@ public class MainLayout extends AppLayout {
     public MainLayout() {
         createHeader();
         createDrawer();
+        setDrawerOpened(false);
     }
 
     private void createDrawer() {
@@ -27,9 +30,11 @@ public class MainLayout extends AppLayout {
     }
 
     private void createHeader() {
-        RouterLink carsLink = new RouterLink("Cars", ListView.class);
+        RouterLink carsLink = new RouterLink("Cars", ListViewCar.class);
+        RouterLink brandsLink = new RouterLink("Brands", ListViewBrand.class);
         carsLink.setHighlightCondition(HighlightConditions.sameLocation());
+        brandsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        addToDrawer(new VerticalLayout(carsLink));
+        addToDrawer(new VerticalLayout(carsLink, brandsLink));
     }
 }

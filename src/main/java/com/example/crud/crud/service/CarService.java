@@ -1,5 +1,7 @@
-package com.example.crud.crud.car;
+package com.example.crud.crud.service;
 
+import com.example.crud.crud.entity.Car;
+import com.example.crud.crud.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

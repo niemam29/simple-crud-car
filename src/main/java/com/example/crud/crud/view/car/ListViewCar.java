@@ -1,7 +1,9 @@
 package com.example.crud.crud.view.car;
 
 import com.example.crud.crud.entity.Car;
+import com.example.crud.crud.repository.BrandRepository;
 import com.example.crud.crud.repository.CarRepository;
+import com.example.crud.crud.service.BrandService;
 import com.example.crud.crud.service.CarService;
 import com.example.crud.crud.view.MainLayout;
 import com.vaadin.flow.component.Component;
@@ -25,8 +27,10 @@ public class ListViewCar extends VerticalLayout {
     FormViewCar formViewCar;
     Button refresh = new Button(new Icon(VaadinIcon.REFRESH));
     private CarService carService;
+    private BrandService brandService;
 
-    public ListViewCar(CarService carService, CarRepository carRepository) {
+    public ListViewCar(CarService carService, BrandService brandService) {
+        this.brandService = brandService;
         this.carService = carService;
         addClassName("list-view");
         setSizeFull();
@@ -48,7 +52,7 @@ public class ListViewCar extends VerticalLayout {
     }
 
     private void configureFrom() {
-        formViewCar = new FormViewCar(carService.getCars());
+        formViewCar = new FormViewCar(carService.getCars(), brandService);
         formViewCar.setWidth("25em");
 
         formViewCar.addCarListener(FormViewCar.SaveEvent.class, this::saveCar);
@@ -94,7 +98,8 @@ public class ListViewCar extends VerticalLayout {
     private void configureGrid() {
         grid.addClassName("car-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "brand", "model", "age");
+
+        grid.setColumns("id_car","brand.name", "model", "age");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editCar(e.getValue()));

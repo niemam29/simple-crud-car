@@ -1,12 +1,15 @@
 package com.example.crud.crud.view.car;
 
+import com.example.crud.crud.entity.Brand;
 import com.example.crud.crud.entity.Car;
+import com.example.crud.crud.service.BrandService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -28,10 +31,11 @@ import java.util.List;
 
 
 public class FormViewCar extends FormLayout {
+    BrandService brandService;
     MemoryBuffer memoryBuffer = new MemoryBuffer();
     Binder<Car> binder = new BeanValidationBinder<>(Car.class);
 
-    TextField brand = new TextField("Brand");
+    ComboBox<Brand> brand = new ComboBox<>("Brand");
     TextField model = new TextField("Model");
     DatePicker dateOfProduction = new DatePicker("Date of production");
     Upload photo = new Upload(memoryBuffer);
@@ -41,7 +45,8 @@ public class FormViewCar extends FormLayout {
     Button cancel = new Button("Cancel");
     private Car car;
 
-    public FormViewCar(List<Car> cars) {
+    public FormViewCar(List<Car> cars,BrandService brandService) {
+        this.brandService = brandService;
         addClassName("form-view");
         binder.bindInstanceFields(this);
         add(
@@ -50,8 +55,10 @@ public class FormViewCar extends FormLayout {
     }
 
     private Component createFormInputLayout() {
-
+        brand.setItems(brandService.getBrands());
+        brand.setItemLabelGenerator(Brand::getName);
         brand.setWidthFull();
+
         model.setWidthFull();
 
         photo.setWidthFull();
@@ -59,7 +66,7 @@ public class FormViewCar extends FormLayout {
 
         photo.addFinishedListener(e -> {
             String fileName = memoryBuffer.getFileName();
-            File file = new File("/tmp/files/" + fileName);
+            File file = new File("src/main/tmp/" + fileName);
             try {
                 FileUtils.copyInputStreamToFile(InputStream.nullInputStream(), file);
             } catch (IOException ioException) {
@@ -140,8 +147,8 @@ public class FormViewCar extends FormLayout {
         }
     }
 
-    protected  <T extends ComponentEvent<?>> Registration addCarListener(Class<T> eventType,
-                                                                  ComponentEventListener<T> listener) {
+    protected <T extends ComponentEvent<?>> Registration addCarListener(Class<T> eventType,
+                                                                        ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
 }

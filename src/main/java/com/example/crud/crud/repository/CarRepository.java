@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
 
-    @Query("select c from Car c " +
-            "where lower(c.brand) like lower(concat('%', :searchTerm, '%')) or lower(c.model) like lower(concat('%', :searchTerm, '%'))")
+    @Query("select c from Car c join c.brand b " +
+            "where lower(b.name) like lower(concat('%', :searchTerm, '%')) or lower(c.model) like lower(concat('%', :searchTerm, '%'))")
     List<Car> search(@Param("searchTerm") String searchTerm);
 }

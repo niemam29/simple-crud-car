@@ -18,6 +18,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
+import elemental.json.Json;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.example.crud.crud.utils.fileUtil.generateFileNameWithTimestamp;
 
 public class FormViewBrand extends FormLayout {
     MemoryBuffer memoryBuffer = new MemoryBuffer();
@@ -56,10 +59,12 @@ public class FormViewBrand extends FormLayout {
         logo.setMaxFiles(1);
 
         logo.addFinishedListener(e -> {
-            String fileName = memoryBuffer.getFileName();
-            File file = new File("/tmp/files/" + fileName);
+
+            String fileName = generateFileNameWithTimestamp(memoryBuffer.getFileName());
+            InputStream inputStream = null;
+            File file = new File("src/main/webapp/" + fileName);
             try {
-                FileUtils.copyInputStreamToFile(InputStream.nullInputStream(), file);
+                FileUtils.copyInputStreamToFile(memoryBuffer.getInputStream(), file);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

@@ -16,13 +16,13 @@ public class Car {
     @SequenceGenerator(name = "car_sequence", sequenceName = "car_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "car_sequence")
     @NotNull
-    private Long id;
+    private Long id_car;
 
     @NotEmpty
     private String model;
 
     @NotEmpty
-    private String brand;
+    private String brandS;
 
     @PastOrPresent
     private LocalDate dateOfProduction;
@@ -32,16 +32,26 @@ public class Car {
     @Transient
     private Integer age;
 
-    public Car(String model, String brand, LocalDate dateOfProduction) {
+    @ManyToOne
+    @JoinColumn(name ="id_brand")
+    private Brand brand;
+
+    public Car(String model, String brandS, LocalDate dateOfProduction) {
         this.model = model;
-        this.brand = brand;
+        this.brandS = brandS;
         this.dateOfProduction = dateOfProduction;
     }
-
-    public Car(Long id, String model, String brand, LocalDate dateOfProduction) {
-        this.id = id;
+    public Car(String model, String brandS, LocalDate dateOfProduction, Brand brand) {
         this.model = model;
+        this.brandS = brandS;
+        this.dateOfProduction = dateOfProduction;
         this.brand = brand;
+    }
+
+    public Car(Long id_car, String model, String brandS, LocalDate dateOfProduction) {
+        this.id_car = id_car;
+        this.model = model;
+        this.brandS = brandS;
         this.dateOfProduction = dateOfProduction;
     }
 
@@ -50,15 +60,15 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Car{" + "id=" + id + ", model='" + model + '\'' + ", brand='" + brand + '\'' + ", dateOfProduction=" + dateOfProduction + '}';
+        return "Car{" + "id=" + id_car + ", model='" + model + '\'' + ", brand='" + brandS + '\'' + ", dateOfProduction=" + dateOfProduction + '}';
     }
 
-    public Long getId() {
-        return id;
+    public Long getId_car() {
+        return id_car;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId_car(Long id_car) {
+        this.id_car = id_car;
     }
 
     public String getModel() {
@@ -69,12 +79,12 @@ public class Car {
         this.model = model;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getBrandS() {
+        return brandS;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setBrandS(String brandS) {
+        this.brandS = brandS;
     }
 
     public LocalDate getDateOfProduction() {
@@ -96,5 +106,19 @@ public class Car {
 
     public void setPhoto(File photo) {
         this.photo = photo;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+    public String getBrandName(){
+        return brand.getName();
+    }
+    public void setBrandName(String brandName){
+        brand.setName(brandName);
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
     }
 }

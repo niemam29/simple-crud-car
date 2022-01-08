@@ -1,17 +1,14 @@
 package com.example.crud.crud.view.brand;
 
 import com.example.crud.crud.entity.Brand;
-import com.example.crud.crud.entity.Car;
 import com.example.crud.crud.repository.BrandRepository;
 import com.example.crud.crud.service.BrandService;
 import com.example.crud.crud.view.MainLayout;
-import com.example.crud.crud.view.car.FormViewCar;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -20,7 +17,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.server.StreamResource;
+import elemental.json.Json;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 
 @PageTitle("Car CRUD")
@@ -49,7 +52,7 @@ public class ListViewBrand extends VerticalLayout {
 
 
     private Component getContent() {
-        HorizontalLayout layout = new HorizontalLayout(grid,formViewBrand);
+        HorizontalLayout layout = new HorizontalLayout(grid, formViewBrand);
         layout.setFlexGrow(2, grid);
         layout.setFlexGrow(1, formViewBrand);
         layout.addClassName("content");
@@ -62,13 +65,17 @@ public class ListViewBrand extends VerticalLayout {
     }
 
     private void refreshItemsOnGrid() {
+        //cleaning list of uploaded files
+        formViewBrand.logo.getElement().setPropertyJson("files", Json.createArray());
         grid.setItems(brandService.getBrandByFilter(textField.getValue()));
     }
 
     private void configureGrid() {
         grid.addClassName("brand-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "name", "address", "yearOfCreation","logo");
+        grid.setColumns("id_brand", "name", "address", "yearOfCreation");
+
+        grid.addComponentColumn(this::createLogo);
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(e -> editBrand(e.getValue()));
@@ -88,6 +95,7 @@ public class ListViewBrand extends VerticalLayout {
         toolbar.addClassName("toolbar");
         return toolbar;
     }
+
     private void closeForm() {
         formViewBrand.setBrand(null);
         formViewBrand.setVisible(false);
@@ -102,6 +110,7 @@ public class ListViewBrand extends VerticalLayout {
         formViewBrand.addBrandListener(FormViewBrand.DeleteEvent.class, this::deleteCar);
         formViewBrand.addBrandListener(FormViewBrand.CloseEvent.class, this::closeEvent);
     }
+
     private void saveCar(FormViewBrand.SaveEvent event) {
         brandService.addBrand(event.getBrand());
         refreshItemsOnGrid();
@@ -118,6 +127,7 @@ public class ListViewBrand extends VerticalLayout {
         refreshItemsOnGrid();
         closeForm();
     }
+
     private void editBrand(Brand brand) {
         if (brand == null) {
             closeForm();
@@ -133,4 +143,9 @@ public class ListViewBrand extends VerticalLayout {
         editBrand(new Brand());
     }
 
+    private Image createLogo(Brand brand) {
+        Image image = new Image(brand.getLogo().getName(), "logo");
+        image.setMaxHeight("30px");
+        return image;
+    }
 }

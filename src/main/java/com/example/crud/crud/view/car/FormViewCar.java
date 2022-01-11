@@ -38,7 +38,6 @@ public class FormViewCar extends FormLayout {
     ComboBox<Brand> brand = new ComboBox<>("Brand");
     TextField model = new TextField("Model");
     DatePicker dateOfProduction = new DatePicker("Date of production");
-    Upload photo = new Upload(memoryBuffer);
 
     Button save = new Button("Save");
     Button delete = new Button("Delete");
@@ -61,21 +60,7 @@ public class FormViewCar extends FormLayout {
 
         model.setWidthFull();
 
-        photo.setWidthFull();
-        photo.setMaxFiles(1);
-
-        photo.addFinishedListener(e -> {
-            String fileName = memoryBuffer.getFileName();
-            File file = new File("src/main/tmp/" + fileName);
-            try {
-                FileUtils.copyInputStreamToFile(InputStream.nullInputStream(), file);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-            car.setPhoto(file);
-        });
-
-        return new VerticalLayout(brand, model, createDatePicker(), photo, createButtonLayout());
+        return new VerticalLayout(brand, model, createDatePicker(), createButtonLayout());
     }
 
     private Component createDatePicker() {

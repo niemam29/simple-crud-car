@@ -86,7 +86,7 @@ public class ListViewBrand extends VerticalLayout {
         textField.setClearButtonVisible(true);
         textField.setValueChangeMode(ValueChangeMode.LAZY);
         textField.addValueChangeListener(e -> refreshItemsOnGrid());
-        Button addCarButton = new Button("Add car");
+        Button addCarButton = new Button("Add brand");
 
         addCarButton.addClickListener(e -> addBrand());
         refresh.addClickListener(e -> refreshItemsOnGrid());

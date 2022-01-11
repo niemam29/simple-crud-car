@@ -34,6 +34,7 @@ public class Brand {
     @OneToMany(mappedBy = "brand")
     private Set<Car> cars;
 
+    @NotNull
     private File logo;
 
     @Transient
